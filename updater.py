@@ -17,7 +17,6 @@ def test_ip() -> bool:
     to_update = []
     for domain in domains:
         temp_ip = socket.gethostbyname(domain)
-        logging.info(f'testing own ip: {own_ip} against gotten ip: {temp_ip}')
         if own_ip != temp_ip:
             to_update.append(domain)
     logging.info(f"To update: {str(to_update)}")
@@ -25,6 +24,7 @@ def test_ip() -> bool:
 
 def update_ips():
     os.system(f'curl -X GET {update_url}')
+    logging.info('update successfull')
 
 
 if __name__ == '__main__':
