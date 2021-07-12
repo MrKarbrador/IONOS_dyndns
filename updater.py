@@ -21,7 +21,7 @@ def test_ip() -> bool:
         if own_ip != temp_ip:
             to_update.append(domain)
     logging.info(f"To update: {str(to_update)}")
-    return to_update > 0
+    return len(to_update) > 0
 
 def update_ips():
     os.system(f'curl -X GET {update_url}')
