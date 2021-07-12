@@ -1,5 +1,5 @@
 # IONOS_dyndns
-simple dyndns-update-script for IONOS
+Simple dyndns-update-script for IONOS-DNS entries.
 
 # Requirements
-needs curl to be installed on the system
+Requires curl to be installed on the system.
