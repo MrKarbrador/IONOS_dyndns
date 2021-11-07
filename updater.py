@@ -1,15 +1,17 @@
 import socket
-from requests import get
+from requests import get, post
 import logging
 import os
 
 domains = [
     'example.com'
 ]
-update_url = 'update_url',
+API_URL = 'https://api.hosting.ionos.com/dns/v1/dyndns'
+OWN_IP_URL = 'http://api.ipify.org/'
+X_API_KEY= 'key'
 
 def get_own_ip() -> str:
-    ip = get('http://api.ipify.org/').text
+    ip = get(OWN_IP_URL).text
     return ip
 
 def test_ip() -> bool:
@@ -20,15 +22,21 @@ def test_ip() -> bool:
         if own_ip != temp_ip:
             to_update.append(domain)
     logging.info(f"To update: {str(to_update)}")
-    return len(to_update) > 0
+    return to_update
 
-def update_ips():
-    os.system(f'curl -X GET {update_url}')
+def update_ips(list_domains: list[str]):
+    header={'x-api-key': X_API_KEY}
+    post_param = {
+        'domains': list_domains,
+        'description': 'DynamicDNS Script'
+    }
+    request = post(API_URL, )
+    os.system(f'curl -X GET {API_URL}')
     logging.info('update successfull')
 
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO, format='[%(asctime)s] %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
     update_list = test_ip()
-    if update_list:
-        update_ips()
+    if len(update_list) > 0:
+        update_ips(list_domains)
