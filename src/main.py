@@ -77,10 +77,16 @@ def get_update_url(list_domains: list[str]) -> str:
 
 
 if __name__ == '__main__':
+    logging_file_handler = logging.FileHandler("dyndns_log", 'a')
+    logging_stdout_handler = logging.StreamHandler(sys.stdout)
     logging.basicConfig(
         level=logging.INFO,
         format='[%(asctime)s] %(levelname)s: %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
+        datefmt='%Y-%m-%d %H:%M:%S',
+        handlers=[
+            logging_stdout_handler,
+            logging_stdout_handler
+        ]
     )
     update_list = test_ip()
     if len(sys.argv) > 1:
