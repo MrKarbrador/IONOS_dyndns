@@ -53,8 +53,8 @@ def get_update_url(list_domains: List[str]) -> str:
         str: url to update the dns-entry with or None if the API-call failed
     """
     request_body: DynDnsRequest = DynDnsRequest(
-        list_domains,
-        'IONOS_dyndns update-script'
+        domains=list_domains,
+        description='IONOS_dyndns update-script'
     )
     try:
         response: Response[Union[DynamicDns, List[Error]]] =\
