@@ -1,6 +1,7 @@
 class Config:
     domains = [
-    'example.com'
+        'example.com',
+        'www.example.com'
     ]
     own_ip_api_url = 'http://api.ipify.org/'
     x_api_key= 'key'
