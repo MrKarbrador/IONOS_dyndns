@@ -8,9 +8,9 @@ from requests import get
 from dns_api_client.api.dynamic_dns import activate_dyn_dns
 from dns_api_client.models import DynamicDns, DynDnsRequest
 from dns_api_client.types import UNSET, Response
-from src.config import get_config
-from src.dns_api_client.client import AuthenticatedClient
-from src.dns_api_client.models.error import Error
+from config import get_config
+from dns_api_client.client import AuthenticatedClient
+from dns_api_client.models.error import Error
 
 config = get_config()
 
