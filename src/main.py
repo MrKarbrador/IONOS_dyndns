@@ -27,11 +27,11 @@ def get_own_ip() -> str:
     return ip
 
 
-def test_ip() -> list[str]:
+def test_ip() -> List[str]:
     """Test if own IP is same as IP in dns-entry for each domain specified
 
     Returns:
-        list[str]: List of domains to update
+        List[str]: List of domains to update
     """
     own_ip = get_own_ip()
     to_update = []
@@ -43,11 +43,11 @@ def test_ip() -> list[str]:
     return to_update
 
 
-def get_update_url(list_domains: list[str]) -> str:
+def get_update_url(list_domains: List[str]) -> str:
     """get the update-url for the urls from the API
 
     Args:
-        list_domains (list[str]): list of domains which need to be updated
+        list_domains (List[str]): list of domains which need to be updated
 
     Returns:
         str: url to update the dns-entry with or None if the API-call failed
