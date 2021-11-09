@@ -7,5 +7,9 @@ edit config.py to set domains which need to be updated and API-key [created](htt
 
 # Usage
 
-run
+run script:
 > bash run.sh
+
+## or
+
+run main.py in src using python
