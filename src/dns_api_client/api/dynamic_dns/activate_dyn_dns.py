@@ -38,28 +38,25 @@ def _parse_response(*, response: httpx.Response) -> Optional[Union[DynamicDns, L
     if response.status_code == 400:
         response_400 = []
         _response_400 = response.json()
-        for response_400_item_data in _response_400:
-            response_400_item = Error.from_dict(response_400_item_data)
+        response_400_item = Error.from_dict(_response_400)
 
-            response_400.append(response_400_item)
+        response_400.append(response_400_item)
 
         return response_400
     if response.status_code == 401:
         response_401 = []
         _response_401 = response.json()
-        for response_401_item_data in _response_401:
-            response_401_item = Error.from_dict(response_401_item_data)
+        response_401_item = Error.from_dict(_response_401)
 
-            response_401.append(response_401_item)
+        response_401.append(response_401_item)
 
         return response_401
     if response.status_code == 500:
         response_500 = []
         _response_500 = response.json()
-        for response_500_item_data in _response_500:
-            response_500_item = Error.from_dict(response_500_item_data)
+        response_500_item = Error.from_dict(_response_500)
 
-            response_500.append(response_500_item)
+        response_500.append(response_500_item)
 
         return response_500
     return None
