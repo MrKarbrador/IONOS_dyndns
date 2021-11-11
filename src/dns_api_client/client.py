@@ -45,4 +45,4 @@ class AuthenticatedClient(Client):
 
     def get_headers(self) -> Dict[str, str]:
         """Get headers to be used in authenticated endpoints"""
-        return {"X_API_KEY": f"{self.token}", **self.headers}
+        return {"X-API-Key": f"{self.token}", **self.headers}
