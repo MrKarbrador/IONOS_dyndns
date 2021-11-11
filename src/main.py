@@ -72,7 +72,7 @@ def get_update_url(list_domains: List[str]) -> str:
             type(response.parsed) is not DynamicDns or\
             type(response.parsed.update_url) is UNSET:
         logging.error(
-            f'API-call failed: {response.status_code}, {type(response.parsed)}'
+            f'API-call failed: {response.status_code}, {response.parsed}'
         )
         return None
     parsed: DynamicDns = response.parsed
