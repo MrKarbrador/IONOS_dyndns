@@ -64,8 +64,18 @@ def get_update_url(list_domains: List[str]) -> str:
     except RuntimeError as error:
         logging.error(error)
         return None
-    parsed = response.json()
-    return parsed['update_url']
+    except AttributeError as error:
+        logging.error(error)
+        return None
+    if response.status_code != 200 or\
+            type(response.parsed) is not DynamicDns or\
+            type(response.parsed.update_url) is UNSET:
+        logging.error(
+            f'API-call failed: {response.status_code}, {type(response.parsed)}'
+        )
+        return None
+    parsed: DynamicDns = response.parsed
+    return parsed.update_url
 
 
 if __name__ == '__main__':
