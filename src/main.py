@@ -1,20 +1,15 @@
+import json
 import logging
 import socket
 import sys
-from typing import List, Union
+from typing import List
+from urllib.request import Request, urlopen
 
 from requests import get
 
-from dns_api_client.api.dynamic_dns import activate_dyn_dns
-from dns_api_client.models import DynamicDns, DynDnsRequest
-from dns_api_client.types import UNSET, Response
 from config import get_config
-from dns_api_client.client import AuthenticatedClient
-from dns_api_client.models.error import Error
 
 config = get_config()
-
-client = AuthenticatedClient(base_url=config.ionos_api, token=config.x_api_key)
 
 
 def get_own_ip() -> str:
@@ -52,31 +47,25 @@ def get_update_url(list_domains: List[str]) -> str:
     Returns:
         str: url to update the dns-entry with or None if the API-call failed
     """
-    request_body: DynDnsRequest = DynDnsRequest(
-        domains=list_domains,
-        description='IONOS_dyndns update-script'
-    )
+    request_body = str(json.dumps({
+        'domains': list_domains,
+        'description': 'IONOS_dyndns update-script'
+    })).encode('utf-8')
     try:
-        response: Response[Union[DynamicDns, List[Error]]] =\
-            activate_dyn_dns.sync_detailed(
-                client=client,
-                json_body=request_body
-            )
+        request = Request(f'{config.ionos_api}/v1/dyndns', data=request_body)
+        request.add_header('X-API-Key', config.x_api_key)
+        response = urlopen(request)
+        status = response.getcode()
+        if status != 200:
+            logging.error(
+                f'API-call failed: {status}, {response.read().decode("utf-8")}'
+                )
+            return None
     except RuntimeError as error:
         logging.error(error)
         return None
-    except AttributeError as error:
-        logging.error(error)
-        return None
-    if response.status_code != 200 or\
-            type(response.parsed) is not DynamicDns or\
-            type(response.parsed.update_url) is UNSET:
-        logging.error(
-            f'API-call failed: {response.status_code}, {response.parsed}'
-        )
-        return None
-    parsed: DynamicDns = response.parsed
-    return parsed.update_url
+    parsed = response.json()
+    return parsed['update_url']
 
 
 if __name__ == '__main__':
