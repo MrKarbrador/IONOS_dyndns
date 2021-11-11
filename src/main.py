@@ -52,7 +52,7 @@ def get_update_url(list_domains: List[str]) -> str:
         'description': 'IONOS_dyndns update-script'
     })).encode('utf-8')
     try:
-        request = Request(f'{config.ionos_api}/v1/dyndns',headers={'x-api-key': config.x_api_key} , data=request_body)
+        request = Request(f'{config.ionos_api}/v1/dyndns',headers={'x-api-key', config.x_api_key} , data=request_body)
         logging.info(request.header_items())
         response = urlopen(request)
         status = response.getcode()
