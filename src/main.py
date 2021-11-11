@@ -65,6 +65,9 @@ def get_update_url(list_domains: List[str]) -> str:
     except RuntimeError as error:
         logging.error(error)
         return None
+    except AttributeError as error:
+        logging.error(error)
+        return None
     if response.status_code != 200 or\
             type(response.parsed) is not DynamicDns or\
             type(response.parsed.update_url) is UNSET:
