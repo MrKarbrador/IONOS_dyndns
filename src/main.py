@@ -36,7 +36,10 @@ def test_ip() -> List[str]:
     own_ip = get_own_ip()
     to_update = []
     for domain in config.domains:
-        temp_ip = socket.gethostbyname(domain)
+        try:
+            temp_ip = socket.gethostbyname(domain)
+        except socket.gaierror:
+            temp_ip = 'error'
         if own_ip != temp_ip:
             to_update.append(domain)
     logging.info(f"To update: {str(to_update)}")
