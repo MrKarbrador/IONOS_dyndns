@@ -3,7 +3,7 @@ class Config:
         'example.com',
         'www.example.com'
     ]
-    own_ip_api_url = 'http://api.ipify.org/'
+    own_ip_api_url = 'https://api.ipify.org/'
     x_api_key = 'key'
     ionos_api = 'https://api.hosting.ionos.com/dns'
 
