@@ -27,6 +27,16 @@ def get_own_ip() -> str:
     return ip
 
 
+def get_own_ipv6() -> str:
+    """return own (external) IP(v4) as retrieved
+
+    Returns:
+        str: IP as string
+    """
+    ip = get(config.own_ipv6_api_url).text
+    return ip
+
+
 def test_ip() -> List[str]:
     """Test if own IP is same as IP in dns-entry for each domain specified
 
@@ -38,6 +48,28 @@ def test_ip() -> List[str]:
     for domain in config.domains:
         try:
             temp_ip = socket.gethostbyname(domain)
+        except socket.gaierror:
+            temp_ip = 'error'
+        if own_ip != temp_ip:
+            to_update.append(domain)
+    logging.info(f"To update: {str(to_update)}")
+    return to_update
+
+
+def test_ipv6() -> List[str]:
+    """Test if own IPv6 is same as IPv6 in dns-entry for each domain specified
+
+    Returns:
+        List[str]: List of domains to update
+    """
+    own_ip = get_own_ipv6()
+    if not ':' in own_ip:
+        logging.error(f'invalid ipv6: {own_ip}')
+        return []
+    to_update = []
+    for domain in config.domains:
+        try:
+            temp_ip = socket.getaddrinfo(domain, None, socket.AF_INET6)[0][4][0]
         except socket.gaierror:
             temp_ip = 'error'
         if own_ip != temp_ip:
@@ -94,11 +126,12 @@ if __name__ == '__main__':
             logging_stdout_handler
         ]
     )
-    update_list = test_ip()
+    update_list = list(set(test_ip() + test_ipv6()))
     if len(sys.argv) > 1:
         if sys.argv[1] == 'force':
             update_list = config.domains
     if len(update_list) > 0:
         update_url = get_update_url(update_list)
         if update_url is not None:
+            update_url = f'{update_url}&ipv4={get_own_ip()}&ipv6={get_own_ipv6()}'
             logging.info(get(update_url).status_code)
